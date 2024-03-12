@@ -1,0 +1,31 @@
+services:
+  go:
+    container_name: go-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app
+    ports:
+      - 58080:8080
+    tty: true
+  db:
+    container_name: postgresql
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=p@ssword
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+  front:
+    container_name: front
+    image: node:20.10.0-alpine3.18
+    ports:
+      - 8080:8080
+    volumes:
+      - ./front:/app
+    working_dir: /app
+    tty: true
+volumes:
+  postgres_volume:
